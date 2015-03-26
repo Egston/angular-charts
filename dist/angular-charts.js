@@ -60,7 +60,7 @@ angular.module('angularCharts').directive('acChart', [
    */
     function getChildrenByClassname(childrens, className) {
       var child = null;
-      for (var i in childrens) {
+      for (var i = 0; i < childrens.length; i++) {
         if (angular.isElement(childrens[i])) {
           child = angular.element(childrens[i]);
           if (child.hasClass(className))
@@ -98,6 +98,7 @@ angular.module('angularCharts').directive('acChart', [
           lineCurveType: 'cardinal',
           isAnimate: true,
           yAxisTickFormat: 's',
+          xAxisTickRotate: 0,
           waitForHeightAndWidth: false
         };
       prepareConfig();
@@ -231,7 +232,7 @@ angular.module('angularCharts').directive('acChart', [
         var margin = {
             top: 0,
             right: 20,
-            bottom: 30,
+            bottom: 5,
             left: 40
           };
         width -= margin.left + margin.right;
@@ -287,14 +288,23 @@ angular.module('angularCharts').directive('acChart', [
        * Start drawing the chart!
        * @type {[type]}
        */
-        var svg = d3.select(chartContainer[0]).append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-        svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
-        svg.append('g').attr('class', 'y axis').call(yAxis);
+        var svg = d3.select(chartContainer[0]).append('svg').attr('width', width + margin.left + margin.right);
+        var chart = svg.append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        chart.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
+        chart.append('g').attr('class', 'y axis').call(yAxis);
+        /* Rotate text in x axis ticks */
+        if (config.xAxisTickRotate) {
+          svg.selectAll('g.x.axis text').style('text-anchor', 'end').attr('dx', '-.65em').attr('dy', '0').attr('transform', 'rotate(' + config.xAxisTickRotate + ')');
+        }
+        /* set SVG height, including height x axis */
+        var rect = chart.select('g.x.axis')[0][0].getBoundingClientRect();
+        maxTickHeight = rect.height;
+        svg.attr('height', height + margin.top + margin.bottom + maxTickHeight);
         /**
        * Add bars
        * @type {[type]}
        */
-        var barGroups = svg.selectAll('.state').data(points).enter().append('g').attr('class', 'g').attr('transform', function (d) {
+        var barGroups = chart.selectAll('.state').data(points).enter().append('g').attr('class', 'g').attr('transform', function (d) {
             return 'translate(' + x(d.x) + ',0)';
           });
         var bars = barGroups.selectAll('rect').data(function (d) {
