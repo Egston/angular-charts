@@ -96,6 +96,7 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       lineCurveType: 'cardinal',
       isAnimate: true,
       yAxisTickFormat: 's',
+      xAxisTickRotate: 0, // number of degrees; -65 is one of good values
       waitForHeightAndWidth: false
     };
 
@@ -327,6 +328,15 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       chart.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+
+      /* Rotate text in x axis ticks */
+      if (config.xAxisTickRotate) {
+        svg.selectAll('g.x.axis text')
+          .style('text-anchor', 'end')
+          .attr("dx", "-.65em")
+          .attr("dy", "0")
+          .attr("transform", "rotate(" + config.xAxisTickRotate + ")");
+      }
 
       /* set SVG height, including height x axis */
       var rect = chart.select('g.x.axis')[0][0].getBoundingClientRect();
