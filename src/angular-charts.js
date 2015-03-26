@@ -250,7 +250,7 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       var margin = {
         top: 0,
         right: 20,
-        bottom: 30,
+        bottom: 5,
         left: 40
       };
       width -= margin.left + margin.right;
@@ -314,25 +314,30 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
        * @type {[type]}
        */
       var svg = d3.select(chartContainer[0]).append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
+        .attr("width", width + margin.left + margin.right);
+
+      var chart = svg.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      svg.append("g")
+      chart.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
-      svg.append("g")
+      chart.append("g")
         .attr("class", "y axis")
         .call(yAxis);
+
+      /* set SVG height, including height x axis */
+      var rect = chart.select('g.x.axis')[0][0].getBoundingClientRect();
+      maxTickHeight = rect.height;
+      svg.attr('height', height + margin.top + margin.bottom + maxTickHeight);
 
       /**
        * Add bars
        * @type {[type]}
        */
-      var barGroups = svg.selectAll(".state")
+      var barGroups = chart.selectAll(".state")
         .data(points)
         .enter().append("g")
         .attr("class", "g")
