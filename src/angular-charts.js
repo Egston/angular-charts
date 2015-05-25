@@ -91,6 +91,9 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
         htmlEnabled: false
       },
       colors: defaultColors,
+      getBarColor: function(group_index, value) {
+        return null; // use standard getter
+      },
       innerRadius: 0, // Only on pie Charts
       lineLegend: 'lineEnd', // Only on line Charts
       lineCurveType: 'cardinal',
@@ -370,7 +373,7 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       })
         .attr("y", height)
         .style("fill", function(d) {
-          return getColor(d.s);
+          return getColor(d.s, d.y);
         })
         .attr("height", 0)
         .transition()
@@ -1192,15 +1195,16 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       return $sce.trustAsHtml(config.legend.htmlEnabled ? text : escapeHtml(text));
     }
 
-    /**
-     * Checks if index is available in color
-     * else returns a random color
-     * @param  {[type]} i [description]
-     * @return {[type]}   [description]
-     */
-    function getColor(i) {
-      if (i < config.colors.length) {
-        return config.colors[i];
+    function getColor(group_index, value) {
+      if (chartType === 'bar' && typeof config.getBarColor === 'function') {
+          var color = config.getBarColor(group_index, value);
+          if (color !== null) {
+              return color;
+          }
+      }
+
+      if (group_index < config.colors.length) {
+        return config.colors[group_index];
       } else {
         var color = getRandomColor();
         config.colors.push(color);

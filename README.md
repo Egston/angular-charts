@@ -70,6 +70,7 @@ Allowed values - `'pie', 'bar', 'line', 'point', 'area'`
   },
   // override this array if you're not happy with default colors
   colors: [],
+  getBarColor: function(group_index, value) {}, // custom color getter for bar chart
   innerRadius: 0, // Only on pie Charts
   lineLegend: 'lineEnd', // Only on line Charts
   lineCurveType: 'cardinal', // change this as per d3 guidelines to avoid smoothline
