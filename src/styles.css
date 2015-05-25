@@ -9,6 +9,13 @@
     stroke-width: 1px;
     shape-rendering: crispEdges;
 }
+.angular-charts-template line.threshold {
+    fill: none;
+    stroke: red;
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
+
 .angular-charts-template .ac-title {
     font-weight: bold;
     font-size: 1.2em;

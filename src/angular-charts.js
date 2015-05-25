@@ -98,6 +98,7 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       yAxisTickFormat: 's',
       xAxisTickRotate: 0, // number of degrees; -65 is one of good values
       displayHorizontalGrid: false, //TODO: implemented only for barChart
+      threshold: undefined, //TODO: implemented only for barChart
       waitForHeightAndWidth: false
     };
 
@@ -381,6 +382,19 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
         .attr("height", function(d) {
           return Math.abs(y(d.y) - y(0));
         });
+
+      /**
+       * Append optional threshold line
+       */
+      if (config.threshold != undefined) {
+        chart.append('line')
+          .attr('class', 'threshold')
+          .attr('y1', y(config.threshold))
+          .attr('y2', y(config.threshold))
+          .attr('x1', 0)
+          .attr('x2', width);
+      }
+
       /**
        * Add events for tooltip
        * @param  {[type]} d [description]
