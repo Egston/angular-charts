@@ -97,6 +97,7 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
       isAnimate: true,
       yAxisTickFormat: 's',
       xAxisTickRotate: 0, // number of degrees; -65 is one of good values
+      displayHorizontalGrid: false, //TODO: implemented only for barChart
       waitForHeightAndWidth: false
     };
 
@@ -438,6 +439,21 @@ angular.module('angularCharts').directive('acChart', function($templateCache, $c
         .attr("y1", y(0))
         .attr("y2", y(0))
         .style("stroke", "silver");
+
+      /**
+       * Horizontal grid
+       */
+      if (config.displayHorizontalGrid) {
+        chart.selectAll("line.horizontalGrid").data(y.ticks(10)).enter()
+          .append("line")
+            .attr({
+              "class": "horizontalGrid",
+              "x1": 0,
+              "x2": width,
+              "y1": function(d){ return y(d);},
+              "y2": function(d){ return y(d);}
+            });
+      }
     }
 
     /**

@@ -3,6 +3,12 @@
     fill: none;
     stroke: #333;
 }
+.angular-charts-template line.horizontalGrid {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-width: 1px;
+    shape-rendering: crispEdges;
+}
 .angular-charts-template .ac-title {
     font-weight: bold;
     font-size: 1.2em;

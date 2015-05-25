@@ -78,7 +78,8 @@ Allowed values - `'pie', 'bar', 'line', 'point', 'area'`
   xAxisMaxTicks: 7, // Optional: maximum number of X axis ticks to show if data points exceed this number
   yAxisTickFormat: 's', // refer tickFormats in d3 to edit this value
   xAxisTickRotate: 0, // Rotate x-axis texts (-65 degrees is one of good angles)
-  waitForHeightAndWidth: false // if true, it will not throw an error when the height or width are not defined (e.g. while creating a modal form), and it will be keep watching for valid height and width values
+  waitForHeightAndWidth: false, // if true, it will not throw an error when the height or width are not defined (e.g. while creating a modal form), and it will be keep watching for valid height and width values
+  displayHorizontalGrid: false, // if true, display horizontal grid line (currently implemented only for barChart)
 };
 ```
 
