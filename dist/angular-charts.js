@@ -93,12 +93,17 @@ angular.module('angularCharts').directive('acChart', [
             htmlEnabled: false
           },
           colors: defaultColors,
+          getBarColor: function (group_index, value) {
+            return null;  // use standard getter
+          },
           innerRadius: 0,
           lineLegend: 'lineEnd',
           lineCurveType: 'cardinal',
           isAnimate: true,
           yAxisTickFormat: 's',
           xAxisTickRotate: 0,
+          displayHorizontalGrid: false,
+          threshold: undefined,
           waitForHeightAndWidth: false
         };
       prepareConfig();
@@ -314,12 +319,18 @@ angular.module('angularCharts').directive('acChart', [
         bars.attr('x', function (d, i) {
           return x0(i);
         }).attr('y', height).style('fill', function (d) {
-          return getColor(d.s);
+          return getColor(d.s, d.y);
         }).attr('height', 0).transition().ease('cubic-in-out').duration(config.isAnimate ? 1000 : 0).attr('y', function (d) {
           return y(Math.max(0, d.y));
         }).attr('height', function (d) {
           return Math.abs(y(d.y) - y(0));
         });
+        /**
+       * Append optional threshold line
+       */
+        if (config.threshold != undefined) {
+          chart.append('line').attr('class', 'threshold').attr('y1', y(config.threshold)).attr('y2', y(config.threshold)).attr('x1', 0).attr('x2', width);
+        }
         /**
        * Add events for tooltip
        * @param  {[type]} d [description]
@@ -360,7 +371,23 @@ angular.module('angularCharts').directive('acChart', [
         /**
        * Draw one zero line in case negative values exist
        */
-        svg.append('line').attr('x1', width).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'silver');
+        chart.append('line').attr('x1', width).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'silver');
+        /**
+       * Horizontal grid
+       */
+        if (config.displayHorizontalGrid) {
+          chart.selectAll('line.horizontalGrid').data(y.ticks(10)).enter().append('line').attr({
+            'class': 'horizontalGrid',
+            'x1': 0,
+            'x2': width,
+            'y1': function (d) {
+              return y(d);
+            },
+            'y2': function (d) {
+              return y(d);
+            }
+          });
+        }
       }
       /**
      * Draws a line chart
@@ -858,15 +885,15 @@ angular.module('angularCharts').directive('acChart', [
       function getBindableTextForLegend(text) {
         return $sce.trustAsHtml(config.legend.htmlEnabled ? text : escapeHtml(text));
       }
-      /**
-     * Checks if index is available in color
-     * else returns a random color
-     * @param  {[type]} i [description]
-     * @return {[type]}   [description]
-     */
-      function getColor(i) {
-        if (i < config.colors.length) {
-          return config.colors[i];
+      function getColor(group_index, value) {
+        if (chartType === 'bar' && typeof config.getBarColor === 'function') {
+          var color = config.getBarColor(group_index, value);
+          if (color !== null) {
+            return color;
+          }
+        }
+        if (group_index < config.colors.length) {
+          return config.colors[group_index];
         } else {
           var color = getRandomColor();
           config.colors.push(color);
@@ -917,7 +944,7 @@ angular.module('angularCharts').directive('acChart', [
 (function () {
     // styles.min.css
     var cssText = "" +
-".angular-charts-template .axis path,.angular-charts-template .axis line{fill:none;stroke:#333}.angular-charts-template .ac-title{font-weight:700;font-size:1.2em}.angular-charts-template .ac-chart{float:left;width:75%}.angular-charts-template .ac-line{fill:none;stroke-width:2px}.angular-charts-template table{float:left;max-width:25%;list-style:none;margin:0;padding:0}.angular-charts-template td[ng-bind]{display:inline-block}.angular-charts-template .ac-legend-box{border-radius:5px;height:15px;width:15px}.ac-tooltip{display:block;position:absolute;border:2px solid rgba(51,51,51,.9);background-color:rgba(22,22,22,.7);border-radius:5px;padding:5px;color:#fff}";
+".angular-charts-template .axis path,.angular-charts-template .axis line{fill:none;stroke:#333}.angular-charts-template line.horizontalGrid{fill:none;stroke:rgba(0,0,0,.2);stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template line.threshold{fill:none;stroke:red;stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template .ac-title{font-weight:700;font-size:1.2em}.angular-charts-template .ac-chart{float:left;width:75%}.angular-charts-template .ac-line{fill:none;stroke-width:2px}.angular-charts-template table{float:left;max-width:25%;list-style:none;margin:0;padding:0}.angular-charts-template td[ng-bind]{display:inline-block}.angular-charts-template .ac-legend-box{border-radius:5px;height:15px;width:15px}.ac-tooltip{display:block;position:absolute;border:2px solid rgba(51,51,51,.9);background-color:rgba(22,22,22,.7);border-radius:5px;padding:5px;color:#fff}";
     // cssText end
 
     var styleEl = document.createElement("style");
