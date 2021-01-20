@@ -104,6 +104,9 @@ module.exports = function(grunt) {
         command: [
           'git checkout bower',
           'git checkout master-egston -- bower.json',
+          // ship a package.json since the bower support has been dropped from
+          // many tools (e.g. yarn)
+          'git show master-egston:package.dist.json > package.json',
           'mv -f dist/angular-charts.tmp.js dist/angular-charts.js',
           'mv -f dist/angular-charts.min.tmp.js dist/angular-charts.min.js',
           "git commit -am 'release <%= pkg.version %>'",

@@ -1,0 +1,17 @@
+{
+  "name": "angular-charts",
+  "version": "0.2.7+egston.2",
+  "description": "angular directives for common charts using d3, for more information visit",
+  "keywords": [
+    "d3",
+    "charts",
+    "angular",
+    "angularjs"
+  ],
+  "dependencies": {
+    "d3": "~3.3.10"
+  },
+  "repository": "https://github.com/chinmaymk/angular-charts.git",
+  "author": "chinmaymk",
+  "license": "MIT"
+}
