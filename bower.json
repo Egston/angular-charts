@@ -1,6 +1,6 @@
 {
   "name": "angular-charts",
-  "version": "0.2.6",
+  "version": "0.2.7+egston.3"
   "authors": [
     "chinmaymk"
   ],
@@ -27,6 +27,7 @@
     "angular": "latest"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.16"
+    "angular-mocks": "~1.2.16",
+    "angular": "~1.2"
   }
 }

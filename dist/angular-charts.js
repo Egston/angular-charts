@@ -943,9 +943,7 @@ angular.module('angularCharts').directive('acChart', [
 ]);
 (function () {
     // styles.min.css
-    var cssText = "" +
-".angular-charts-template .axis path,.angular-charts-template .axis line{fill:none;stroke:#333}.angular-charts-template line.horizontalGrid{fill:none;stroke:rgba(0,0,0,.2);stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template line.threshold{fill:none;stroke:red;stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template .ac-title{font-weight:700;font-size:1.2em}.angular-charts-template .ac-chart{float:left;width:75%}.angular-charts-template .ac-line{fill:none;stroke-width:2px}.angular-charts-template table{float:left;max-width:25%;list-style:none;margin:0;padding:0}.angular-charts-template td[ng-bind]{display:inline-block}.angular-charts-template .ac-legend-box{border-radius:5px;height:15px;width:15px}.ac-tooltip{display:block;position:absolute;border:2px solid rgba(51,51,51,.9);background-color:rgba(22,22,22,.7);border-radius:5px;padding:5px;color:#fff}";
-    // cssText end
+    var cssText = ".angular-charts-template .axis path,.angular-charts-template .axis line{fill:none;stroke:#333}.angular-charts-template line.horizontalGrid{fill:none;stroke:rgba(0,0,0,.2);stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template line.threshold{fill:none;stroke:red;stroke-width:1px;shape-rendering:crispEdges}.angular-charts-template .ac-title{font-weight:700;font-size:1.2em}.angular-charts-template .ac-chart{float:left;width:75%}.angular-charts-template .ac-line{fill:none;stroke-width:2px}.angular-charts-template table{float:left;max-width:25%;list-style:none;margin:0;padding:0}.angular-charts-template td[ng-bind]{display:inline-block}.angular-charts-template .ac-legend-box{border-radius:5px;height:15px;width:15px}.ac-tooltip{display:block;position:absolute;border:2px solid rgba(51,51,51,.9);background-color:rgba(22,22,22,.7);border-radius:5px;padding:5px;color:#fff}";
 
     var styleEl = document.createElement("style");
     document.getElementsByTagName("head")[0].appendChild(styleEl);
@@ -955,7 +953,7 @@ angular.module('angularCharts').directive('acChart', [
         }
     } else {
         try {
-            styleEl.innerHTML = cssText
+            styleEl.innerHTML = cssText;
         } catch(e) {
             styleEl.innerText = cssText;
         }
